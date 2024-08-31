@@ -1,18 +1,23 @@
 ## After the .fastq files were analyzed using the seq2science pipeline, the GRCm38.p6-counts.tsv file was used as the initial DESeq2 input. This file contains the raw counts of reads per gene obtained by the sequencing procedure, for each sample and replicate.
 
 ## First, install the BiocManager and DESeq2 packages.
+
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
   
 BiocManager::install("DESeq2")
 
 ## Set the working directory where you want to work.
+
 setwd("/Users/yordanov/Desktop/Internship Work/RNAseq/")
 getwd()
 
 ##Load the packages which will be needed for the analysis.
+
 library(DESeq2)
 library(ggplot2)
+
+## Import the seq2science .tsv file as an initial input.
 
 Counts <- read.delim("GRCm38.p6-counts copy.tsv", header = TRUE, row.names = 1, sep = "\t")
 Counts
@@ -21,10 +26,13 @@ Counts
 ## Include only genes which have more than 50 reads across all samples and replicates.
 ## Could be deleted and replaced by rowSums 
 
-#Counts1 <- Counts[which(rowSums(Counts) > 50),]
+Counts1 <- Counts[which(rowSums(Counts) > 50),]
 
 ## Determine the different conditions. There are 4 conditions in total, with 8 samples (2 replicates of each condition). In order for DESeq2 to execute the DE analysis, the different replicates must be written down with the same names, this way the program will recognize them as separate replicates of the same condition.
+
 condition <- factor (c("WT", "WT", "HMGB1", "HMGB1", "HMGB2", "HMGB2", "HMGB_DKO", "HMGB_DKO"))
+
+## Perform the actual DE analysis:
 
 coldata <- data.frame(row.names = colnames(Counts), condition)
 coldata$replicate <- c(rep("Rep1", 4), rep("Rep2", 4))
@@ -38,6 +46,7 @@ dds <- DESeq(dds)
 vsdata <- vst(dds, blind=FALSE)
 
 ##Quality check of the data: PCA plot which shows the similarity between samples; Dispersion estimates
+
 PCA <- plotPCA(vsdata, intgroup = "replicate", ntop=500)
 PCA1 <- plotPCA(vsdata, intgroup = "condition", ntop=500)
 plotDispEsts(dds)
@@ -45,6 +54,8 @@ plotDispEsts(dds)
 ## The actual differential expression analysis, repeated for all conditions of interest
 ## Exclude the genes with N/A pAdjVal.
 ## Exclude all genes with pAdjVal above 0.05.
+## To the bottom one can see all different comparisons which I have made through the project.
+
 HMGB1vsWT_VP <- results(dds, contrast = c("condition", "HMGB1", "WT"))
 HMGB1vsWT_VPP <- HMGB1vsWT_VP[HMGB1vsWT_VP$pvalue < 0.05,]
 write.csv(HMGB1vsWT_VP, file="HMGB1vsWT_VP.csv")
