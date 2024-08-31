@@ -1,0 +1,8 @@
+## First the number of reads in each fastq must be checked so the down-sampling can be done to the lowest fastq reads:
+
+zcat file.fastq.gz | wc -l
+
+## To downsample the seqtk tool is needed and the following line was used:
+
+mbshome/yyordanov/seqtk/seqtk sample -s100 file.fastq.gz numberreads > new_file.fastq.gz
+
