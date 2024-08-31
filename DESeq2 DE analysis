@@ -1,1 +1,117 @@
 ## After the .fastq files were analyzed using the seq2science pipeline, the GRCm38.p6-counts.tsv file was used as the initial DESeq2 input. This file contains the raw counts of reads per gene obtained by the sequencing procedure, for each sample and replicate.
+
+## First, install the BiocManager and DESeq2 packages.
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+  
+BiocManager::install("DESeq2")
+
+## Set the working directory where you want to work.
+setwd("/Users/yordanov/Desktop/Internship Work/RNAseq/")
+getwd()
+
+##Load the packages which will be needed for the analysis.
+library(DESeq2)
+library(ggplot2)
+
+Counts <- read.delim("GRCm38.p6-counts copy.tsv", header = TRUE, row.names = 1, sep = "\t")
+Counts
+
+
+## Include only genes which have more than 50 reads across all samples and replicates.
+## Could be deleted and replaced by rowSums 
+
+#Counts1 <- Counts[which(rowSums(Counts) > 50),]
+
+## Determine the different conditions. There are 4 conditions in total, with 8 samples (2 replicates of each condition). In order for DESeq2 to execute the DE analysis, the different replicates must be written down with the same names, this way the program will recognize them as separate replicates of the same condition.
+condition <- factor (c("WT", "WT", "HMGB1", "HMGB1", "HMGB2", "HMGB2", "HMGB_DKO", "HMGB_DKO"))
+
+coldata <- data.frame(row.names = colnames(Counts), condition)
+coldata$replicate <- c(rep("Rep1", 4), rep("Rep2", 4))
+
+dds <- DESeqDataSetFromMatrix(countData = Counts, colData = coldata, design = ~condition)
+dds <- estimateSizeFactors(dds)
+idx <- rowSums(counts(dds, normalized = TRUE) >= 5) >= 3
+dds <- dds[idx, ]
+dds <- DESeq(dds)
+
+vsdata <- vst(dds, blind=FALSE)
+
+##Quality check of the data: PCA plot which shows the similarity between samples; Dispersion estimates
+PCA <- plotPCA(vsdata, intgroup = "replicate", ntop=500)
+PCA1 <- plotPCA(vsdata, intgroup = "condition", ntop=500)
+plotDispEsts(dds)
+
+## The actual differential expression analysis, repeated for all conditions of interest
+## Exclude the genes with N/A pAdjVal.
+## Exclude all genes with pAdjVal above 0.05.
+HMGB1vsWT_VP <- results(dds, contrast = c("condition", "HMGB1", "WT"))
+HMGB1vsWT_VPP <- HMGB1vsWT_VP[HMGB1vsWT_VP$pvalue < 0.05,]
+write.csv(HMGB1vsWT_VP, file="HMGB1vsWT_VP.csv")
+
+HMGB2vsWT_VP <- results(dds, contrast = c("condition", "HMGB2", "WT"))
+HMGB2vsWT_VPP <- HMGB2vsWT_VP[HMGB2vsWT_VP$pvalue < 0.05,]
+write.csv(HMGB2vsWT_VPP, file="HMGB2vsWT_VP.csv")
+
+HMGB_DKOvsWT_VP <- results(dds, contrast = c("condition", "HMGB_DKO", "WT"))
+HMGB_DKOvsWT_VPP <- HMGB_DKOvsWT_VP[HMGB_DKOvsWT_VP$pvalue < 0.05,]
+write.csv(HMGB_DKOvsWT_VPP, file="HMGB_DKOvsWT_VP.csv")
+
+HMGB1vsHMGB2_VP <- results(dds, contrast = c("condition", "HMGB1", "HMGB2"))
+HMGB1vsHMGB2_VPP <- HMGB1vsHMGB2_VP[HMGB1vsHMGB2_VP$pvalue < 0.05,]
+write.csv(HMGB1vsHMGB2_VPP, file="HMGB1vsHMGB2_VP.csv")
+
+HMGB1vsHMGB_DKO_VP <- results(dds, contrast = c("condition", "HMGB1", "HMGB_DKO"))
+HMGB1vsHMGB_DKO_VPP <- HMGB1vsHMGB_DKO_VP[HMGB1vsHMGB_DKO_VP$pvalue < 0.05,]
+write.csv(HMGB1vsHMGB_DKO_VPP, file="HMGB1vsHMGB_DKO_VP.csv")
+
+HMGB2vsHMGB_DKO_VP <- results(dds, contrast = c("condition", "HMGB2", "HMGB_DKO"))
+HMGB2vsHMGB_DKO_VPP <- HMGB2vsHMGB_DKO_VP[HMGB2vsHMGB_DKO_VP$pvalue < 0.05,]
+write.csv(HMGB2vsHMGB_DKO_VPP, file="HMGB2vsHMGB_DKO_VP.csv")
+
+HMGB1vsWT <- results(dds, contrast = c("condition", "HMGB1", "WT"))
+HMGB1vsWT <- na.omit(HMGB1vsWT)
+HMGB1vsWT <- HMGB1vsWT[HMGB1vsWT$padj < 0.05,]
+HMGB1vsWT_UP <- HMGB1vsWT[HMGB1vsWT$log2FoldChange >= 1, ]
+HMGB1vsWT_DOWN <- HMGB1vsWT[HMGB1vsWT$log2FoldChange <= (-1), ]
+HMGB1vsWT_BOTH_PA <- subset(HMGB1vsWT, padj < 0.05 & abs(log2FoldChange) >= 1)
+HMGB1vsWT_BOTH_PV_NA <- subset(HMGB1vsWT, pvalue < 0.05 & abs(log2FoldChange) >= 1)
+HMGB1vsWT_BOTH_PV <- subset(HMGB1vsWT, pvalue < 0.05 & abs(log2FoldChange) >= 1)
+write.csv(HMGB1vsWT_BOTH_PA, file = "HMGB1vsWT_BOTH_PA.csv")
+
+filtered_results <- subset(HMGB1vsWT, log2FoldChange >= 1 | log2FoldChange <= -1)
+head(filtered_results)
+
+
+HMGB2vsWT_VP <- results(dds, contrast = c("condition", "HMGB2", "WT"))
+HMGB2vsWT <- results(dds, contrast = c("condition", "HMGB2", "WT"))
+HMGB2vsWT <- na.omit(HMGB2vsWT)
+HMGB2vsWT <- HMGB2vsWT[HMGB2vsWT$padj < 0.05,]
+HMGB2vsWT_UP <- HMGB2vsWT[HMGB2vsWT$log2FoldChange >= 1, ]
+HMGB2vsWT_DOWN <- HMGB2vsWT[HMGB2vsWT$log2FoldChange <= (-1), ]
+HMGB2vsWT_BOTH_PA <- subset(HMGB2vsWT, padj < 0.05 & abs(log2FoldChange) >= 1)
+HMGB2vsWT_BOTH_PV <- subset(HMGB2vsWT, pvalue < 0.05 & abs(log2FoldChange) >= 1)
+HMGB2vsWT_BOTH_PV_NA <- subset(HMGB2vsWT, pvalue < 0.05 & abs(log2FoldChange) >= 1)
+write.csv(HMGB2vsWT_BOTH_PA, file="HMGB2vsWT_BOTH_PA.csv")
+
+
+HMGB_DKOvsWT_VP <- results(dds, contrast = c("condition", "HMGB_DKO", "WT"))
+HMGB_DKOvsWT <- results(dds, contrast = c("condition", "HMGB_DKO", "WT"))
+HMGB_DKOvsWT <- na.omit(HMGB_DKOvsWT)
+HMGB_DKOvsWT <- HMGB_DKOvsWT[HMGB_DKOvsWT$padj < 0.05,]
+HMGB_DKOvsWT_UP <- HMGB_DKOvsWT[HMGB_DKOvsWT$log2FoldChange >= 1, ]
+HMGB_DKOvsWT_DOWN <- HMGB_DKOvsWT[HMGB_DKOvsWT$log2FoldChange <= (-1), ]
+HMGB_DKOvsWT_BOTH_PA <- subset(HMGB_DKOvsWT, padj < 0.05 & abs(log2FoldChange) >= 1)
+HMGB_DKOvsWT_BOTH_PV <- subset(HMGB_DKOvsWT, pvalue < 0.05 & abs(log2FoldChange) >= 1)
+HMGB_DKOvsWT_BOTH_PV_NA <- subset(HMGB_DKOvsWT, pvalue < 0.05 & abs(log2FoldChange) >= 1)
+write.csv(HMGB_DKOvsWT_BOTH_PA, file="HMGB_DKOvsWT_BOTH_PA.csv")
+
+HMGB1vsHMGB2_VP <- results(dds, contrast = c("condition", "HMGB1", "HMGB2"))
+HMGB1vsHMGB2 <- results(dds, contrast = c("condition", "HMGB1", "HMGB2"))
+HMGB1vsHMGB2 <- na.omit(HMGB1vsHMGB2)
+HMGB1vsHMGB2 <- HMGB1vsHMGB2[HMGB1vsHMGB2$padj < 0.05,]
+HMGB1vsHMGB2_UP <- HMGB1vsHMGB2[HMGB1vsHMGB2$log2FoldChange >= 1, ]
+HMGB1vsHMGB2_DOWN <- HMGB1vsHMGB2[HMGB1vsHMGB2$log2FoldChange <= (-1), ]
+HMGB1vsHMGB2_BOTH_PA <- subset(HMGB1vsHMGB2, padj < 0.05 & abs(log2FoldChange) >= 1)
+HMGB1vsHMGB2_BOTH_PV <- subset(HMGB1vsHMGB2, pvalue < 0.05 & abs(log2FoldChange) >= 1)
+HMGB1vsHMGB2_BOTH_PV_NA <- subset(HMGB1vsHMGB2, pvalue < 0.05 & abs(log2FoldChange) >= 1)
