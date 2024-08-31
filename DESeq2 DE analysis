@@ -1,0 +1,1 @@
+## After the .fastq files were analyzed using the seq2science pipeline, the GRCm38.p6-counts.tsv file was used as the initial DESeq2 input. This file contains the raw counts of reads per gene obtained by the sequencing procedure, for each sample and replicate.
