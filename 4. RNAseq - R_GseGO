@@ -1,0 +1,92 @@
+## Even though not included in the report or the presentation, I upload the code that was used for the analysis:
+
+```{r}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("fgsea")
+```
+
+
+```{r}
+
+HMGB1vsWT_gseGO <- c(HMGB1vsWT$log2FoldChange)
+names(HMGB1vsWT_gseGO) <- rownames(HMGB1vsWT)
+HMGB1vsWT_gseGO <- sort(HMGB1vsWT_gseGO, decreasing = TRUE)
+HMGB1vsWT_gseGO_Results <- gseGO(HMGB1vsWT_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 1e-10, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB1vsWT_gseGO_Results, file="HMGB1vsWT_gseGO_Results.csv")
+HMGB1vsWT_gseGO_DotPlot <- plot(dotplot(HMGB1vsWT_gseGO_Results, showCategory = 15, title = "HMGB1 vs WT GeneOntology - No Filter"))
+
+
+HMGB1vsWT_BOTH_PA_gseGO <- c(HMGB1vsWT_BOTH_PA$log2FoldChange)
+names(HMGB1vsWT_BOTH_PA_gseGO) <- rownames(HMGB1vsWT_BOTH_PA)
+HMGB1vsWT_BOTH_PA_gseGO <- sort(HMGB1vsWT_BOTH_PA_gseGO, decreasing = TRUE)
+HMGB1vsWT_BOTH_PA_gseGO_Results <- gseGO(HMGB1vsWT_BOTH_PA_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 1, maxGSSize = 500, eps = 1e-10, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB1vsWT_BOTH_PA_gseGO_Results, file="HMGB1vsWT_BOTH_PA_gseGO_Results.csv")
+HMGB1vsWT_BOTH_PA_gseGO_DotPlot <- plot(dotplot(HMGB1vsWT_BOTH_PA_gseGO_Results, showCategory = 15, title = "HMGB1 vs WT GeneOntology - All with pAdj < 0.05"))
+
+
+HMGB1vsWT_BOTH_PV_gseGO <- c(HMGB1vsWT_BOTH_PV$log2FoldChange)
+names(HMGB1vsWT_BOTH_PV_gseGO) <- rownames(HMGB1vsWT_BOTH_PV)
+HMGB1vsWT_BOTH_PV_gseGO <- sort(HMGB1vsWT_BOTH_PV_gseGO, decreasing = TRUE)
+HMGB1vsWT_BOTH_PV_gseGO_Results <- gseGO(HMGB1vsWT_BOTH_PV_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 1e-10, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB1vsWT_BOTH_PV_gseGO_Results, file="HMGB1vsWT_BOTH_PV_gseGO_Results.csv")
+HMGB1vsWT_BOTH_PV_gseGO_DotPlot <- plot(dotplot(HMGB1vsWT_BOTH_PV_gseGO_Results, showCategory = 15, title = "HMGB1 vs WT GeneOntology - All with pValue < 0.05"))
+
+
+HMGB1vsWT_BOTH_PV_NA_gseGO <- c(HMGB1vsWT_BOTH_PV_NA$log2FoldChange)
+names(HMGB1vsWT_BOTH_PV_NA_gseGO) <- rownames(HMGB1vsWT_BOTH_PV_NA)
+HMGB1vsWT_BOTH_PV_NA_gseGO <- sort(HMGB1vsWT_BOTH_PV_NA_gseGO, decreasing = TRUE)
+HMGB1vsWT_BOTH_PV_NA_gseGO_Results <- gseGO(HMGB1vsWT_BOTH_PV_NA_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 1e-10, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB1vsWT_BOTH_PV_NA_gseGO_Results, file="HMGB1vsWT_BOTH_PV_NA_gseGO_Results.csv")
+HMGB1vsWT_BOTH_PV_NA_gseGO_DotPlot <- plot(dotplot(HMGB1vsWT_BOTH_PV_NA_gseGO_Results, showCategory = 15, title = "HMGB1 vs WT GeneOntology - All with pValue < 0.05 + NA"))
+```
+
+
+```{r}
+HMGB1vsWT_gseGO <- c(HMGB1vsWT$log2FoldChange)
+names(HMGB1vsWT_gseGO) <- rownames(HMGB1vsWT)
+HMGB1vsWT_gseGO <- sort(HMGB1vsWT_gseGO, decreasing = TRUE)
+HMGB1vsWT_gseGO_Results <- gseGO(HMGB1vsWT_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 0, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB1vsWT_gseGO_Results, file="HMGB1vsWT_gseGO_Results.csv")
+HMGB1vsWT_gseGO_DotPlot <- plot(dotplot(HMGB1vsWT_gseGO_Results, showCategory = 15, title = "HMGB1 vs WT GeneOntology - No Filter gseGO"))
+
+
+HMGB2vsWT_gseGO <- c(HMGB2vsWT$log2FoldChange)
+names(HMGB2vsWT_gseGO) <- rownames(HMGB2vsWT)
+HMGB2vsWT_gseGO <- sort(HMGB2vsWT_gseGO, decreasing = TRUE)
+HMGB2vsWT_gseGO_Results <- gseGO(HMGB2vsWT_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 1e-10, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB2vsWT_gseGO_Results, file="HMGB2vsWT_gseGO_Results.csv")
+HMGB2vsWT_gseGO_DotPlot <- plot(dotplot(HMGB2vsWT_gseGO_Results, showCategory = 15, title = "HMGB2 vs WT GeneOntology - No Filter"))
+
+HMGB_DKOvsWT_gseGO <- c(HMGB_DKOvsWT$log2FoldChange)
+names(HMGB_DKOvsWT_gseGO) <- rownames(HMGB_DKOvsWT)
+HMGB_DKOvsWT_gseGO <- sort(HMGB_DKOvsWT_gseGO, decreasing = TRUE)
+HMGB_DKOvsWT_gseGO_Results <- gseGO(HMGB_DKOvsWT_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 0, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB_DKOvsWT_gseGO_Results, file="HMGB_DKOvsWT_gseGO_Results.csv")
+HMGB_DKOvsWT_gseGO_DotPlot <- plot(dotplot(HMGB_DKOvsWT_gseGO_Results, showCategory = 15, title = "HMGB_DKO vs WT GeneOntology - No Filter"))
+
+
+HMGB1vsHMGB2_gseGO <- c(HMGB1vsHMGB2$log2FoldChange)
+names(HMGB1vsHMGB2_gseGO) <- rownames(HMGB1vsHMGB2)
+HMGB1vsHMGB2_gseGO <- sort(HMGB1vsHMGB2_gseGO, decreasing = TRUE)
+HMGB1vsHMGB2_gseGO_Results <- gseGO(HMGB1vsHMGB2_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 0, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB1vsHMGB2_gseGO_Results, file="HMGB1vsHMGB2_gseGO_Results.csv")
+HMGB1vsHMGB2_gseGO_DotPlot <- plot(dotplot(HMGB1vsHMGB2_gseGO_Results, showCategory = 15, title = "HMGB1 vs HMGB2 GeneOntology - No Filter"))
+
+
+HMGB1vsHMGB_DKO_gseGO <- c(HMGB1vsHMGB_DKO$log2FoldChange)
+names(HMGB1vsHMGB_DKO_gseGO) <- rownames(HMGB1vsHMGB_DKO)
+HMGB1vsHMGB_DKO_gseGO <- sort(HMGB1vsHMGB_DKO_gseGO, decreasing = TRUE)
+HMGB1vsHMGB_DKO_gseGO_Results <- gseGO(HMGB1vsHMGB_DKO_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 1e-10, pvalueCutoff = 0.05, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB1vsHMGB_DKO_gseGO_Results, file="HMGB1vsHMGB_DKO_gseGO_Results.csv")
+HMGB1vsHMGB_DKO_gseGO_DotPlot <- plot(dotplot(HMGB1vsHMGB_DKO_gseGO_Results, showCategory = 15, title = "HMGB1 vs HMGB_DKO GeneOntology - No Filter"))
+
+
+HMGB2vsHMGB_DKO_gseGO <- c(HMGB2vsHMGB_DKO$log2FoldChange)
+names(HMGB2vsHMGB_DKO_gseGO) <- rownames(HMGB2vsHMGB_DKO)
+HMGB2vsHMGB_DKO_gseGO <- sort(HMGB2vsHMGB_DKO_gseGO, decreasing = TRUE)
+HMGB2vsHMGB_DKO_gseGO_Results <- gseGO(HMGB2vsHMGB_DKO_gseGO, ont = "BP", OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", exponent = 1, minGSSize = 10, maxGSSize = 500, eps = 1e-10, pvalueCutoff = 0.09, pAdjustMethod = "BH", verbose = TRUE, seed = FALSE, by = "fgsea")
+write.csv(HMGB2vsHMGB_DKO_gseGO_Results, file="HMGB2vsHMGB_DKO_gseGO_Results.csv")
+HMGB2vsHMGB_DKO_gseGO_DotPlot <- plot(dotplot(HMGB2vsHMGB_DKO_gseGO_Results, showCategory = 15, title = "HMGB2 vs HMGB_DKO GeneOntology - No Filter"))
+```
