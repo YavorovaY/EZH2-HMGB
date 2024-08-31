@@ -1,0 +1,130 @@
+## This file provides all codes for the creation of the different heatmaps used in the report, and during the study:
+
+```{r}
+HMGB1vsWT_DF <- as.data.frame(HMGB1vsWT_UP)
+HMGB1vsWT_MAT <- counts(dds, normalized = T)[rownames(HMGB1vsWT_DF), ]
+HMGB1vsWT_MAT.Z <- t(apply(HMGB1vsWT_MAT, 1, scale))
+colnames(HMGB1vsWT_MAT.Z) <- rownames(coldata)
+HMGB1vsWT_HM <- Heatmap(HMGB1vsWT_MAT.Z, cluster_columns = FALSE, cluster_rows = TRUE, column_labels = colnames(HMGB1vsWT_MAT.Z),
+                             name = "Z-score",)
+png("HMGB1vsWT_DOWN_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB1vsWT_HM)
+
+
+
+
+
+HMGB1vsWT_UP_DF <- as.data.frame(HMGB1vsWT_UP)
+HMGB1vsWT_UP_MAT <- counts(dds, normalized = T)[rownames(HMGB1vsWT_UP_DF), ]
+HMGB1vsWT_UP_MAT.Z <- t(apply(HMGB1vsWT_UP_MAT, 1, scale))
+colnames(HMGB1vsWT_UP_MAT.Z) <- rownames(coldata)
+HMGB1vsWT_UP_HM <- Heatmap(HMGB1vsWT_UP_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score", row_km = 2)
+png("HMGB1vsWT_UP_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB1vsWT_UP_HM)
+```
+
+```{r}
+HMGB2vsWT_DF <- as.data.frame(HMGB2vsWT)
+HMGB2vsWT_MAT <- counts(dds, normalized = T)[rownames(HMGB2vsWT_DF), ]
+HMGB2vsWT_MAT.Z <- t(apply(HMGB2vsWT_MAT, 1, scale))
+colnames(HMGB2vsWT_MAT.Z) <- rownames(coldata)
+HMGB2vsWT_HM <- Heatmap(HMGB2vsWT_MAT.Z, cluster_rows = T, cluster_columns = F,
+                             name = "Z-score", column_title = "HMGB2_KO vs WT DE Genes ", show_row_names = FALSE)
+png("HMGB2vsWT_DOWN_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB2vsWT_DOWN_HM)
+
+
+HMGB2vsWT_UP_DF <- as.data.frame(HMGB2vsWT_UP)
+HMGB2vsWT_UP_MAT <- counts(dds, normalized = T)[rownames(HMGB2vsWT_UP_DF), ]
+HMGB2vsWT_UP_MAT.Z <- t(apply(HMGB2vsWT_UP_MAT, 1, scale))
+colnames(HMGB2vsWT_UP_MAT.Z) <- rownames(coldata)
+HMGB2vsWT_UP_HM <- Heatmap(HMGB2vsWT_UP_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB2vsWT_UP_HM.png", res = 250, width = 1000, height = 10000)
+print(HMGB2vsWT_UP_HM)
+
+```
+
+```{r}
+HMGB_DKOvsWT_DOWN_DF <- as.data.frame(HMGB_DKOvsWT_DOWN)
+HMGB_DKOvsWT_DOWN_MAT <- counts(dds, normalized = T)[rownames(HMGB_DKOvsWT_DOWN_DF), ]
+HMGB_DKOvsWT_DOWN_MAT.Z <- t(apply(HMGB_DKOvsWT_DOWN_MAT, 1, scale))
+colnames(HMGB_DKOvsWT_DOWN_MAT.Z) <- rownames(coldata)
+HMGB_DKOvsWT_DOWN_HM <- Heatmap(HMGB_DKOvsWT_DOWN_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB_DKOvsWT_DOWN_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB_DKOvsWT_DOWN_HM)
+
+
+HMGB_DKOvsWT_UP_DF <- as.data.frame(HMGB_DKOvsWT_UP)
+HMGB_DKOvsWT_UP_MAT <- counts(dds, normalized = T)[rownames(HMGB_DKOvsWT_UP_DF), ]
+HMGB_DKOvsWT_UP_MAT.Z <- t(apply(HMGB_DKOvsWT_UP_MAT, 1, scale))
+colnames(HMGB_DKOvsWT_UP_MAT.Z) <- rownames(coldata)
+HMGB_DKOvsWT_UP_HM <- Heatmap(HMGB_DKOvsWT_UP_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB_DKOvsWT_UP_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB_DKOvsWT_UP_HM)
+
+```
+
+```{r}
+HMGB1vsHMGB2_DOWN_DF <- as.data.frame(HMGB1vsHMGB2_DOWN)
+HMGB1vsHMGB2_DOWN_MAT <- counts(dds, normalized = T)[rownames(HMGB1vsHMGB2_DOWN_DF), ]
+HMGB1vsHMGB2_DOWN_MAT.Z <- t(apply(HMGB1vsHMGB2_DOWN_MAT, 1, scale))
+colnames(HMGB1vsHMGB2_DOWN_MAT.Z) <- rownames(coldata)
+HMGB1vsHMGB2_DOWN_HM <- Heatmap(HMGB1vsHMGB2_DOWN_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB1vsHMGB2_DOWN_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB1vsHMGB2_DOWN_HM)
+
+HMGB1vsHMGB2_UP_DF <- as.data.frame(HMGB1vsHMGB2_UP)
+HMGB1vsHMGB2_UP_MAT <- counts(dds, normalized = T)[rownames(HMGB1vsHMGB2_UP_DF), ]
+HMGB1vsHMGB2_UP_MAT.Z <- t(apply(HMGB1vsHMGB2_UP_MAT, 1, scale))
+colnames(HMGB1vsHMGB2_UP_MAT.Z) <- rownames(coldata)
+HMGB1vsHMGB2_UP_HM <- Heatmap(HMGB1vsHMGB2_UP_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB1vsHMGB2_UP_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB1vsHMGB2_UP_HM)
+```
+
+```{r}
+HMGB1vsHMGB_DKO_DOWN_DF <- as.data.frame(HMGB1vsHMGB_DKO_DOWN)
+HMGB1vsHMGB_DKO_DOWN_MAT <- counts(dds, normalized = T)[rownames(HMGB1vsHMGB_DKO_DOWN_DF), ]
+HMGB1vsHMGB_DKO_DOWN_MAT.Z <- t(apply(HMGB1vsHMGB_DKO_DOWN_MAT, 1, scale))
+colnames(HMGB1vsHMGB_DKO_DOWN_MAT.Z) <- rownames(coldata)
+HMGB1vsHMGB_DKO_DOWN_HM <- Heatmap(HMGB1vsHMGB_DKO_DOWN_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB1vsHMGB_DKO_DOWN_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB1vsHMGB_DKO_DOWN_HM)
+
+HMGB1vsHMGB_DKO_UP_DF <- as.data.frame(HMGB1vsHMGB_DKO_UP)
+HMGB1vsHMGB_DKO_UP_MAT <- counts(dds, normalized = T)[rownames(HMGB1vsHMGB_DKO_UP_DF), ]
+HMGB1vsHMGB_DKO_UP_MAT.Z <- t(apply(HMGB1vsHMGB_DKO_UP_MAT, 1, scale))
+colnames(HMGB1vsHMGB_DKO_UP_MAT.Z) <- rownames(coldata)
+HMGB1vsHMGB_DKO_UP_HM <- Heatmap(HMGB1vsHMGB_DKO_UP_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB1vsHMGB_DKO_UP_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB1vsHMGB_DKO_UP_HM)
+```
+
+```{r}
+HMGB2vsHMGB_DKO_DOWN_DF <- as.data.frame(HMGB2vsHMGB_DKO_DOWN)
+HMGB2vsHMGB_DKO_DOWN_MAT <- counts(dds, normalized = T)[rownames(HMGB2vsHMGB_DKO_DOWN_DF), ]
+HMGB2vsHMGB_DKO_DOWN_MAT.Z <- t(apply(HMGB2vsHMGB_DKO_DOWN_MAT, 1, scale))
+colnames(HMGB2vsHMGB_DKO_DOWN_MAT.Z) <- rownames(coldata)
+HMGB2vsHMGB_DKO_DOWN_HM <- Heatmap(HMGB2vsHMGB_DKO_DOWN_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB2vsHMGB_DKO_DOWN_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB2vsHMGB_DKO_DOWN_HM)
+
+HMGB2vsHMGB_DKO_UP_DF <- as.data.frame(HMGB2vsHMGB_DKO_UP)
+HMGB2vsHMGB_DKO_UP_MAT <- counts(dds, normalized = T)[rownames(HMGB2vsHMGB_DKO_UP_DF), ]
+HMGB2vsHMGB_DKO_UP_MAT.Z <- t(apply(HMGB2vsHMGB_DKO_UP_MAT, 1, scale))
+colnames(HMGB2vsHMGB_DKO_UP_MAT.Z) <- rownames(coldata)
+HMGB2vsHMGB_DKO_UP_HM <- Heatmap(HMGB2vsHMGB_DKO_UP_MAT.Z, cluster_rows = T, cluster_columns = T, column_labels = colnames(mat_simple.z),
+                             name = "Z-score",)
+png("HMGB2vsHMGB_DKO_UP_HM.png", res = 250, width = 1000, height = 2000)
+print(HMGB2vsHMGB_DKO_UP_HM)
+```
+
