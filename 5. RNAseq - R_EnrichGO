@@ -1,0 +1,142 @@
+# Includes the code for generating the EnrichGO analysis
+
+### Due to a error when the plots were generated, I had to remove "as.data.frame(enrichmentGO_output)", however, it is possible that one needs to create a data.frame do download a .csv file. So, first generate the .csv, and then the plots.
+
+## 
+###geneList package 
+
+```{r}
+HMGB1vsWT_UP_GO <- rownames(HMGB1vsWT_UP)
+HMGB1vsWT_UP_GO_Results <- enrichGO(gene = HMGB1vsWT_UP_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsWT_UP_GO_Results, file = "HMGB1vsWT_UP_GO_Results.csv")
+HMGB1vsWT_UP_GO_BarPlot <- plot(barplot(HMGB1vsWT_UP_GO_Results, showCategory = 15, title = "HMGB1 vs WT Upregulated GeneOntology"))
+
+HMGB1vsWT_DOWN_GO <- rownames(HMGB1vsWT_DOWN)
+HMGB1vsWT_DOWN_GO_Results <- enrichGO(gene = HMGB1vsWT_DOWN_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsWT_DOWN_GO_Results, file = "HMGB1vsWT_DOWN_GO_Results.csv")
+HMGB1vsWT_DOWN_GO_BarPlot <- plot(barplot(HMGB1vsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB1 vs WT Downregulated GeneOntology"))
+
+HMGB1vsWT_BOTH_PA_GO <- rownames(HMGB1vsWT_BOTH_PA)
+HMGB1vsWT_BOTH_PA_GO_Results <- enrichGO(gene = HMGB1vsWT_BOTH_PA_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsWT_BOTH_PA_GO_Results, file = "HMGB1vsWT_BOTH_PA_GO_Results.csv")
+HMGB1vsWT_BOTH_PA_GO_BarPlot <- plot(dotplot(HMGB1vsWT_BOTH_PA_GO_Results, showCategory = 15, title = "HMGB1 vs WT Downregulated GeneOntology"))
+
+HMGB1vsWT_BOTH_PV_GO <- rownames(HMGB1vsWT_BOTH_PV)
+HMGB1vsWT_BOTH_PV_GO_Results <- enrichGO(gene = HMGB1vsWT_BOTH_PV_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsWT_BOTH_PV_GO_Results, file = "HMGB1vsWT_BOTH_PV_GO_Results.csv")
+HMGB1vsWT_BOTH_PV_GO_BarPlot <- plot(barplot(HMGB1vsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB1 vs WT Downregulated GeneOntology"))
+
+HMGB1vsWT_BOTH_PV_NA_GO <- rownames(HMGB1vsWT_BOTH_PV_NA)
+HMGB1vsWT_BOTH_PV_NA_GO_Results <- enrichGO(gene = HMGB1vsWT_BOTH_PV_NA_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsWT_BOTH_PV_NA_GO_Results, file = "HMGB1vsWT_BOTH_PV_NA_GO_Results.csv")
+HMGB1vsWT_BOTH_PV_NA_GO_BarPlot <- plot(barplot(HMGB1vsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB1 vs WT Downregulated GeneOntology"))
+
+```
+
+```{r}
+
+### DOWN still has to be exported.
+
+
+HMGB2vsWT_UP_GO <- rownames(HMGB2vsWT_UP)
+HMGB2vsWT_UP_GO_Results <- enrichGO(gene = HMGB2vsWT_UP_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB2vsWT_UP_GO_Results, file = "HMGB2vsWT_UP_GO_Results.csv")
+HMGB2vsWT_UP_GO_BarPlot <- plot(barplot(HMGB2vsWT_UP_GO_Results, showCategory = 15, title = "HMGB2 vs WT Upregulated GeneOntology"))
+
+### I had to make the thresholds lower, since, at 0.05 there are no GO detected. By the way it seems like an enrichGO problem the fact that at these thresholds all GO have the same padj.
+HMGB2vsWT_DOWN_GO <- rownames(HMGB2vsWT_DOWN)
+HMGB2vsWT_DOWN_GO_Results <- enrichGO(gene = HMGB2vsWT_DOWN_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP", pvalueCutoff = 0.4, qvalueCutoff = 0.4)
+write.csv(HMGB2vsWT_DOWN_GO_Results, file = "HMGB2vsWT_DOWN_GO_Results.csv")
+HMGB2vsWT_DOWN_GO_BarPlot <- plot(barplot(HMGB2vsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB2 vs WT Downregulated GeneOntology", ))
+
+HMGB2vsWT_BOTH_PA_GO <- rownames(HMGB2vsWT_BOTH_PA)
+HMGB2vsWT_BOTH_PA_GO_Results <- enrichGO(gene = HMGB2vsWT_BOTH_PA_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB2vsWT_BOTH_PA_GO_Results, file = "HMGB2vsWT_BOTH_PA_GO_Results.csv")
+HMGB2vsWT_BOTH_PA_GO_BarPlot <- plot(dotplot(HMGB2vsWT_BOTH_PA_GO_Results, showCategory = 15, title = "HMGB2 vs WT GeneOntology EnrichGO"))
+
+HMGB2vsWT_BOTH_PV_GO <- rownames(HMGB2vsWT_BOTH_PV)
+HMGB2vsWT_BOTH_PV_GO_Results <- enrichGO(gene = HMGB2vsWT_BOTH_PV_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB2vsWT_BOTH_PV_GO_Results, file = "HMGB2vsWT_BOTH_PV_GO_Results.csv")
+HMGB2vsWT_BOTH_PV_GO_BarPlot <- plot(barplot(HMGB2vsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB2 vs WT Downregulated GeneOntology"))
+
+HMGB2vsWT_BOTH_PV_NA_GO <- rownames(HMGB2vsWT_BOTH_PV_NA)
+HMGB2vsWT_BOTH_PV_NA_GO_Results <- enrichGO(gene = HMGB2vsWT_BOTH_PV_NA_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB2vsWT_BOTH_PV_NA_GO_Results, file = "HMGB2vsWT_BOTH_PV_NA_GO_Results.csv")
+HMGB2vsWT_BOTH_PV_NA_GO_BarPlot <- plot(barplot(HMGB2vsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB2 vs WT Downregulated GeneOntology"))
+```
+
+```{r}
+HMGB_DKOvsWT_UP_GO <- rownames(HMGB_DKOvsWT_UP)
+HMGB_DKOvsWT_UP_GO_Results <- enrichGO(gene = HMGB_DKOvsWT_UP_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB_DKOvsWT_UP_GO_Results, file = "HMGB_DKOvsWT_UP_GO_Results.csv")
+HMGB_DKOvsWT_UP_GO_BarPlot <- plot(barplot(HMGB_DKOvsWT_UP_GO_Results, showCategory = 15, title = "HMGB_DKO vs WT Upregulated GeneOntology"))
+
+HMGB_DKOvsWT_DOWN_GO <- rownames(HMGB_DKOvsWT_DOWN)
+HMGB_DKOvsWT_DOWN_GO_Results <- enrichGO(gene = HMGB_DKOvsWT_DOWN_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB_DKOvsWT_DOWN_GO_Results, file = "HMGB_DKOvsWT_DOWN_GO_Results.csv")
+HMGB_DKOvsWT_DOWN_GO_BP <- plot(barplot(HMGB_DKOvsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB_DKO vs WT Downregulated GeneOntology"))
+print(HMGB_DKOvsWT_DOWN_GO_BarPlot)
+
+HMGB_DKOvsWT_BOTH_PA_GO <- rownames(HMGB_DKOvsWT_BOTH_PA)
+HMGB_DKOvsWT_BOTH_PA_GO_Results <- enrichGO(gene = HMGB_DKOvsWT_BOTH_PA_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB_DKOvsWT_BOTH_PA_GO_Results, file = "HMGB_DKOvsWT_BOTH_PA_GO_Results.csv")
+HMGB_DKOvsWT_BOTH_PA_GO_BarPlot <- plot(dotplot(HMGB_DKOvsWT_BOTH_PA_GO_Results, showCategory = 15, title = "HMGB_DKO vs WT Downregulated GeneOntology"))
+
+HMGB_DKOvsWT_BOTH_PV_GO <- rownames(HMGB_DKOvsWT_BOTH_PV)
+HMGB_DKOvsWT_BOTH_PV_GO_Results <- enrichGO(gene = HMGB_DKOvsWT_BOTH_PV_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB_DKOvsWT_BOTH_PV_GO_Results, file = "HMGB2vsWT_BOTH_PV_GO_Results.csv")
+HMGB_DKOvsWT_BOTH_PV_GO_BarPlot <- plot(barplot(HMGB_DKOvsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB_DKO vs WT Downregulated GeneOntology"))
+
+HMGB_DKOvsWT_BOTH_PV_NA_GO <- rownames(HMGB_DKOvsWT_BOTH_PV_NA)
+HMGB_DKOvsWT_BOTH_PV_NA_GO_Results <- enrichGO(gene = HMGB_DKOvsWT_BOTH_PV_NA_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB2vsWT_BOTH_PV_NA_GO_Results, file = "HMGB_DKOvsWT_BOTH_PV_NA_GO_Results.csv")
+HMGB_DKOvsWT_BOTH_PV_NA_GO_BarPlot <- plot(barplot(HMGB_DKOvsWT_DOWN_GO_Results, showCategory = 15, title = "HMGB2 vs WT Downregulated GeneOntology"))
+```
+
+```{r}
+
+## STill has to be done UP
+
+HMGB1vsHMGB2_UP_GO <- rownames(HMGB1vsHMGB2_UP)
+HMGB1vsHMGB2_UP_GO_Results <- enrichGO(gene = HMGB1vsHMGB2_UP_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP", pvalueCutoff = 0.06, qvalueCutoff = 0.06)
+write.csv(HMGB1vsHMGB2_UP_GO_Results, file = "HMGB1vsHMGB2_UP_GO_Results.csv")
+HMGB1vsHMGB2_UP_GO_BP <- plot(barplot(HMGB1vsHMGB2_UP_GO_Results, showCategory = 15, title = "HMGB1 vs HMGB2 Upregulated GeneOntology"))
+print(HMGB1vsHMGB2_UP_GO_BP)
+
+
+HMGB1vsHMGB2_DOWN_GO <- rownames(HMGB1vsHMGB2_DOWN)
+HMGB1vsHMGB2_DOWN_GO_Results <- enrichGO(gene = HMGB1vsHMGB2_DOWN_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsHMGB2_DOWN_GO_Results, file = "HMGB1vsHMGB2_DOWN_GO_Results.csv")
+HMGB1vsHMGB2_DOWN_GO_BP <- plot(barplot(HMGB1vsHMGB2_DOWN_GO_Results, showCategory = 15, title = "HMGB1 vs HMGB2 Downregulated GeneOntology"))
+print(HMGB1vsHMGB2_DOWN_GO_BP)
+```
+
+```{r}
+HMGB1vsHMGB_DKO_DOWN_GO <- rownames(HMGB1vsHMGB_DKO_DOWN)
+HMGB1vsHMGB_DKO_DOWN_GO_Results <- enrichGO(gene = HMGB1vsHMGB_DKO_DOWN_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsHMGB_DKO_DOWN_GO_Results, file = "HMGB1vsHMGB_DKO_DOWN_GO_Results.csv")
+HMGB1vsHMGB_DKO_DOWN_GO_BP <- plot(barplot(HMGB1vsHMGB_DKO_DOWN_GO_Results, showCategory = 15, title = "HMGB1 vs HMGB_DKO Downregulated GeneOntology"))
+print(HMGB1vsHMGB_DKO_DOWN_GO_BP)
+
+
+HMGB1vsHMGB_DKO_UP_GO <- rownames(HMGB1vsHMGB_DKO_UP)
+HMGB1vsHMGB_DKO_UP_GO_Results <- enrichGO(gene = HMGB1vsHMGB_DKO_UP_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB1vsHMGB_DKO_UP_GO_Results, file = "HMGB1vsHMGB_DKO_UP_GO_Results.csv")
+HMGB1vsHMGB_DKO_UP_GO_BP <- plot(barplot(HMGB1vsHMGB_DKO_UP_GO_Results, showCategory = 15, title = "HMGB1 vs HMGB_DKO Upregulated GeneOntology"))
+print(HMGB1vsHMGB_DKO_UP_GO_BP)
+```
+
+```{r}
+HMGB2vsHMGB_DKO_UP_GO <- rownames(HMGB2vsHMGB_DKO_UP)
+HMGB2vsHMGB_DKO_UP_GO_Results <- enrichGO(gene = HMGB2vsHMGB_DKO_UP_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB2vsHMGB_DKO_UP_GO_Results, file = "HMGB2vsHMGB_DKO_UP_GO_Results.csv")
+HMGB2vsHMGB_DKO_UP_GO_BP <- plot(barplot(HMGB2vsHMGB_DKO_UP_GO_Results, showCategory = 15, title = "HMGB2 vs HMGB_DKO Upregulated GeneOntology"))
+print(HMGB2vsHMGB_DKO_UP_GO_BP)
+
+
+HMGB2vsHMGB_DKO_DOWN_GO <- rownames(HMGB2vsHMGB_DKO_DOWN)
+HMGB2vsHMGB_DKO_DOWN_GO_Results <- enrichGO(gene = HMGB2vsHMGB_DKO_DOWN_GO, OrgDb = "org.Mm.eg.db", keyType = "SYMBOL", ont = "BP")
+write.csv(HMGB2vsHMGB_DKO_DOWN_GO_Results, file = "HMGB2vsHMGB_DKO_DOWN_GO_Results.csv")
+HMGB2vsHMGB_DKO_DOWN_GO_BP <- plot(barplot(HMGB2vsHMGB_DKO_DOWN_GO_Results, showCategory = 15, title = "HMGB2 vs HMGB_DKO Downregulated GeneOntology"))
+print(HMGB2vsHMGB_DKO_DOWN_GO_BP)
+```
