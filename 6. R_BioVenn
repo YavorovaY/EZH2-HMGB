@@ -1,0 +1,16 @@
+## Even though there is the commercial website, I had to write my own code for some of the BioVenns that I created
+
+```{r}
+
+
+list_x <- rownames(HMGB1vsWT_BOTH_PA)
+list_y <- rownames(HMGB2vsWT_BOTH_PA)
+list_z <- rownames(HMGB_DKOvsWT_BOTH_PA)
+
+biovenn <- draw.venn(list_x, list_y, list_z, xtitle="H1vsWT", ytitle="H2vsWT", ztitle="DKOvsWT")
+biovenn <- as.data.frame(biovenn)
+
+write.table(biovenn, file="biovenn.txt", sep=";")
+capture.output(summary(biovenn), file = "biovenn.txt")
+write.table(as.data.frame(biovenn),file="mylist.csv", quote=F,sep=",",row.names=F)
+```
