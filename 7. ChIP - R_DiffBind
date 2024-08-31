@@ -1,0 +1,44 @@
+# To begin the DiffBind the following libraries must be opened.
+
+library(DiffBind)
+library(tidyverse)
+
+#The first step is to read in a set of peaksets and associated metadata. This is done using the sample sheet. Once the peaksets are read in, a merging function finds all overlapping peaks and derives a single set of unique genomic intervals covering all the supplied peaks (a consensus peakset for the experiment). A region is considered for the consensus set if it appears in more than two of the samples. This consensus set represents the overall set of candidate binding sites to be used in further analysis.
+#To do that the directory must be set right first.
+
+setwd("/Users/yordanov/desktop/Internship Work/ChIP/R_files/Ezh2/meta/")
+
+#Then the samplesheet must be uploaded:
+
+samples <- read.csv("MetaData.csv", sep=';')
+dbObj <- dba(sampleSheet=samples)
+
+#The next step is to take the alignment files and compute count information for each of the peaks/regions in the consensus set. In this step, for each of the consensus regions DiffBind takes the number of aligned reads in the ChIP sample and the input sample, to compute a normalized read count for each sample at every potential binding site. The peaks in the consensus peakset may be re-centered and trimmed based on calculating their summits (point of greatest read overlap) in order to provide more standardized peak intervals.
+#We use the dba.count() function with the following additional parameter:
+#bUseSummarizeOverlaps: to use a more standard counting procedure than the built-in one by default.
+
+dbObj <- dba.count(dbObj, bUseSummarizeOverlaps=TRUE)
+
+#To see how well the samples cluster with one another, we can draw a PCA plot using all 85 consensus sites. You should see both Nanog and Pou5f1 replicates clustering together.
+
+dba.plotPCA(dbObj,  attributes=DBA_FACTOR, label=DBA_ID)
+
+#Assign the PCA:Factor plot to a string called "PCA" that way when you type PCAplot, one can access the plot. 
+
+PCAplot <- dba.plotPCA(dbObj,  attributes=DBA_FACTOR, label=DBA_ID)
+
+#We can also plot a correlation heatmap, to evaluate the relationship between samples, with the following code:
+
+plot(dbObj)
+
+#To extract the numerical data from the heatmap, assign the previous code to a string:
+
+CorrelationNumData <- plot(dbObj)
+
+# Before running the differential enrichment analysis, we need to tell DiffBind which samples we want to compare to one another. In our case we only have one factor of interest which is the different transcription factor IPs. Contrasts are set up using the dba.contrast function, as follows:
+
+dba.plotVenn(peaklist,c(2,3,4,6,7,8))
+
+peaklist <- dba.peakset(dbObj, consensus=DBA_FACTOR, minOverlap = 2)
+peaklist
+
