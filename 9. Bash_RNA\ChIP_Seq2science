@@ -1,0 +1,25 @@
+## This file describes each line of bash code needed to complete a seq2science run
+
+## First, create a seq2science environment:
+
+mambra create -n seq2science seq2science
+
+## Then the seq2science must be activated:
+
+conda activate seq2science
+
+## Then the directory of interest must be selected:
+
+cd /yyordanov/project1
+
+## Then the analysis of interest (ChIP-seq/RNA-seq) must be initiated:
+
+seq2science init chip-seq
+seq2science init rna-seq
+
+## Before runing the analysis the config.yaml and the sample.tsv files must be filled with the necessaty instructions and metadata.
+## To run the pipeline the following code is used:
+
+nice -n10 seq2science run chip-seq --cores 10
+nice -n10 seq2science run rna-seq --cores 10
+
