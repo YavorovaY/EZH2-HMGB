@@ -1,0 +1,174 @@
+## This file contains all the codes used for the creation of the Volcano Plots and the MA Plots. First is the general code used for the Volcanos, and at the bottom is the adjusted Volcanos which contain the names of specific genes which we were iterested in.
+
+```{r}
+install.packages('devtools')
+devtools::install_github("kevinblighe/EnhancedVolcano")
+library("EnhancedVolcano")
+
+HMGB1vsWT_Volcano <- as.data.frame(HMGB1vsWT)
+
+EnhancedVolcano(HMGB1vsWT_Volcano, x = "log2FoldChange", y = "padj", lab = rownames(HMGB1vsWT_Volcano), title = "HMGB1 vs WT")
+
+H1vsWT_MAplot <- plotMA(HMGB1vsWT_VP, main = "HMGB1 vs WT DEG", ylim = c(-4.5,4.5))
+
+```
+
+```{r}
+HMGB2vsWT_Volcano <- as.data.frame(HMGB2vsWT_VP)
+
+EnhancedVolcano(HMGB2vsWT_Volcano, x = "log2FoldChange", y = "padj", lab = rownames(HMGB2vsWT_Volcano), title = "HMGB2 vs WT")
+
+H2vsWT_MA <- plotMA(HMGB2vsWT_VP, main = "HMGB2 vs WT DEG", ylim = c(-6,6))
+```
+
+```{r}
+HMGB_DKOvsWT_Volcano <- as.data.frame(HMGB_DKOvsWT_VP)
+
+EnhancedVolcano(HMGB_DKOvsWT_Volcano, x = "log2FoldChange", y = "padj", lab = rownames(HMGB_DKOvsWT_Volcano), title = "HMGB_DKO vs WT")
+
+DKOvsWT_MA <- plotMA(HMGB_DKOvsWT_VP, main = "HMGB_DKO vs WT", ylim = c(-7,7))
+```
+
+```{r}
+HMGB1vsHMGB2_Volcano <- as.data.frame(HMGB1vsHMGB2_VP)
+
+EnhancedVolcano(HMGB1vsHMGB2_Volcano, x = "log2FoldChange", y = "padj", lab = rownames(HMGB1vsHMGB2_Volcano), title = "HMGB1 vs HMGB2")
+
+plotMA(HMGB1vsHMGB2_VP)
+```
+
+```{r}
+HMGB1vsHMGB_DKO_Volcano <- as.data.frame(HMGB1vsHMGB_DKO_VP)
+
+EnhancedVolcano(HMGB1vsHMGB_DKO_Volcano, x = "log2FoldChange", y = "padj", lab = rownames(HMGB1vsHMGB_DKO_Volcano), title = "HMGB1 vs HMGB_DKO")
+
+plotMA(HMGB1vsHMGB_DKO_VP)
+```
+
+```{r}
+HMGB2vsHMGB_DKO_Volcano <- as.data.frame(HMGB2vsHMGB_DKO_VP)
+
+EnhancedVolcano(HMGB2vsHMGB_DKO_Volcano, x = "log2FoldChange", y = "padj", lab = rownames(HMGB2vsHMGB_DKO_Volcano), title = "HMGB2 vs HMGB_DKO")
+
+plotMA(HMGB2vsHMGB_DKO_VP)
+```
+
+
+## From this line downwards are all aadjusted Volcanos
+
+```{r}
+
+
+HMGB1vsWT_VP <- results(dds, contrast = c("condition", "HMGB1", "WT"))
+HMGB1vsWT_VPP <- HMGB1vsWT_VP[HMGB1vsWT_VP$pvalue < 0.05,]
+write.csv(HMGB1vsWT_VPP, file="HMGB1vsWT_VP.csv")
+
+
+HMGB1vsWT_EnhancedVolcano <- EnhancedVolcano(HMGB1vsWT_VP,
+                lab = rownames(HMGB1vsWT_VP),
+                x = "log2FoldChange",
+                y = "pvalue", ylim=c(0,15), 
+                xlab = bquote(~Log[2]~ 'fold change'),
+                selectLab = c("Hs3st4", "Evc", "Usp26", "Evc2", "Scml2", "Atxn1", "Fat2", "Efhc2", "Kctd16", "Serping1", "Smc1b", "Dgki", "Pdzk1", "1700108F19Rik", "Bcat1", "Tek", "Dab2", "Grb10", "Sgce", "Hmgb1", "Ezhip"),
+                title = "HMGB1 vs WT",
+                pCutoff = 0.05,
+                FCcutoff = 1,
+                drawConnectors = TRUE,
+                widthConnectors = 0.25,
+                maxoverlapsConnectors = 100)
+```
+
+
+```{r}
+
+HMGB2vsWT_EnhancedVolcano <- EnhancedVolcano(HMGB2vsWT_VP,
+                lab = rownames(HMGB2vsWT_VP),
+                x = "log2FoldChange",
+                y = "pvalue", ylim=c(0,30), 
+                xlab = bquote(~Log[2]~ 'fold change'),
+                selectLab = c("Scml2", "Ddx3y", "Eif2s3y", "Uty", "Smoc1", "H2-Eb1", "1700013H16Rik", "Usp26", "Inpp5d", "Acan", "Itgb3", "Atp1a3", "Nlrp4c", "Sptbn2", "Tmem117", "Hmgb2", "Csf3r", "Miip", "Psd4", "Lama3", "Ezhip"),
+                title = "HMGB2 vs WT",
+                pCutoff = 0.05,
+                FCcutoff = 1,
+                drawConnectors = TRUE,
+                widthConnectors = 0.25,
+                maxoverlapsConnectors = 100)
+
+```
+
+
+```{r}
+
+HMGB_DKOvsWT_EnhancedVolcano <- EnhancedVolcano(HMGB_DKOvsWT_VP,
+                lab = rownames(HMGB_DKOvsWT_VP),
+                x = "log2FoldChange",
+                y = "pvalue", ylim=c(0,35), 
+                xlab = bquote(~Log[2]~ 'fold change'),
+                selectLab = c("Slc38a4", "Hmgb1", "Hmgb2", "Klf12", "Enpp3", "Sptbn2", "Scml2", "Bcat1", "Igf2bp2", "Tmem117", "Inhbb", "Fat2", "Eps8", "Itgb3", "Cpn1", "Smoc1", "Acpp", "H2-Eb1", "Klhdc7a", "Dpysl3", "Chrna4", "Ezhip"),
+                title = "HMGB_DKO vs WT",
+                pCutoff = 0.05,
+                FCcutoff = 1,
+                drawConnectors = TRUE,
+                widthConnectors = 0.25,
+                maxoverlapsConnectors = 100)
+
+
+```
+
+```{r}
+
+  <- EnhancedVolcano(HMGB1vsHMGB2_VP,
+                lab = rownames(HMGB1vsHMGB2_VP),
+                x = "log2FoldChange",
+                y = "pvalue", ylim=c(0,30), 
+                xlab = bquote(~Log[2]~ 'fold change'),
+                selectLab = c("Hmgb1", "Hmgb2", "Ddx3y", "Eif2s3y", "Uty", "Atp1a3", "Inpp5d", "H2-Eb1", "Slc38a4", "Psd4", "Mme", "Tmem117", "Adamts9", "Accsl", "Epha1", "Wls", "Smoc1", "Chka", "Hck", "Gm40406", "Cald1", "Gldc"),
+                title = "HMGB1 vs HMGB2",
+                pCutoff = 0.05,
+                FCcutoff = 1,
+                drawConnectors = TRUE,
+                widthConnectors = 0.25,
+                maxoverlapsConnectors = 100)
+
+
+```
+
+```{r}
+
+HMGB1vsHMGB_DKO_EnhancedVolcano <- EnhancedVolcano(HMGB1vsHMGB_DKO_VP,
+                lab = rownames(HMGB1vsHMGB_DKO_VP),
+                x = "log2FoldChange",
+                y = "pvalue", ylim=c(0,20), 
+                xlab = bquote(~Log[2]~ 'fold change'),
+                selectLab = c("Hmgb1", "Hmgb2", "Slc38a4", "Runx1", "Enpp3", "Sptbn2", "Tmem117", "Klf12", "LOC115487747", "Inhbb", "Wls", "Inpp5d", "Prex2", "B3gnt3", "Rnf144b", "Col4a1", "Gm10323", "Fcgr2b", "Chka", "Ptges", "Naa11", "4930519F16Rik"),
+                title = "HMGB1 vs HMGB_DKO",
+                pCutoff = 0.05,
+                FCcutoff = 1,
+                drawConnectors = TRUE,
+                widthConnectors = 0.25,
+                maxoverlapsConnectors = 100)
+
+HMGB1vsHMGB_DKO_EnhancedVolcano
+```
+
+```{r}
+
+HMGB2vsHMGB_DKO_EnhancedVolcano <- EnhancedVolcano(HMGB2vsHMGB_DKO_VP,
+                lab = rownames(HMGB2vsHMGB_DKO_VP),
+                x = "log2FoldChange",
+                y = "pvalue", ylim=c(0,25), 
+                xlab = bquote(~Log[2]~ 'fold change'),
+                selectLab = c("Hmgb1", "Slc38a4", "Eif2s3y", "Gm25360", "Ddx3y", "Rhoa", "Nlrp4c", "Ccl25", "Sp5", "1700013H16Rik", "Tcaf1", "Uty", "Klf12", "Gm22973", "Enpp3", "Tcp11x2", "Cd109", "Lrrfip1", "Aoah", "Pigu"),
+                title = "HMGB2 vs HMGB_DKO",
+                pCutoff = 0.05,
+                FCcutoff = 1,
+                drawConnectors = TRUE,
+                widthConnectors = 0.25,
+                maxoverlapsConnectors = 100)
+
+```
+
+
+
+
+
