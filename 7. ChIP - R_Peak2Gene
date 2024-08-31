@@ -1,0 +1,118 @@
+## Provides information how to generate peak2gene data, as well as provides information how to convert this data into a list containing gene names
+
+
+```{r}
+library(rtracklayer)
+setwd('/Volumes/LaCie/Marks Laboratory/ChIPseq/Seq2Science_Outputs/ChIP_2i_ezh2_HMGBKO/results/macs2/')
+summits_file <- '/Volumes/LaCie/Marks Laboratory/ChIPseq/Seq2Science_Outputs/ChIP_2i_ezh2_HMGBKO/results/macs2/DKO_Fixed_Peaks.bed'
+
+
+### To check and remove NA in bed files
+#bed_data <- read.table("Rep2_bed.bed", header = FALSE, sep = "\t", stringsAsFactors = FALSE)
+#na_check <- is.na(bed_data$V2) | is.na(bed_data$V3)
+#if (any(na_check)) {
+#  print("There are NAs in the 'start' or 'end' columns.")
+#  print(bed_data[na_check, ])
+#} else {
+#  print("No NAs found in the 'start' or 'end' columns.")
+#}
+
+#bed_data_clean <- bed_data[!na_check, ]
+
+#na_check_clean <- is.na(bed_data_clean$V2) | is.na(bed_data_clean$V3)
+#if (any(na_check_clean)) {
+#  print("There are still NAs in the 'start' or 'end' columns.")
+#} else {
+#  print("No NAs found in the 'start' or 'end' columns after cleaning.")
+#}
+
+
+twist.summits <- import.bed(summits_file)
+
+library(GenomicFeatures)
+install.packages("RMariaDB")
+library(RMariaDB)
+txdb <- makeTxDbFromUCSC(genome="mm10")
+
+Mmusculus <- TxDb.Mmusculus.UCSC.mm10.knownGene
+
+allTx <- transcriptsBy(txdb, by='gene')
+
+
+genic.tx <- reduce(allTx)
+genes <- unlist(genic.tx)
+
+
+overlap.genes <- countOverlaps(genes,twist.summits)
+
+nearestGene <- nearest(twist.summits,genes)
+
+genes[nearestGene]
+geneNearPeaks <- unique(names(genes[nearestGene]))
+
+head(geneNearPeaks,15)
+
+allTx.gr <- unlist(allTx)
+
+TSS <- resize(allTx.gr,width=1,fix='start')
+
+allTx.gr[strand(allTx.gr)]
+
+t1 <- allTx.gr[strand(allTx.gr) == '+']
+t2 <- allTx.gr[strand(allTx.gr) == '-']
+resize(t1,width=1,fix='start')
+resize(t2,width=1,fix='start')
+
+nearest.iv <- nearest(twist.summits,TSS)
+sum(is.na(nearest.iv))
+twist.summits[is.na(nearest.iv)]
+
+nearest.tss <- TSS[nearest(twist.summits,TSS)]
+
+
+
+write.csv(nearest.tss, file="nearesttss.csv")
+```
+
+```{r}
+setwd('/Volumes/LaCie/Marks Laboratory/ChIPseq/Seq2Science_Outputs/ChIP_2i_K27_Makrs/results/macs2/')
+
+library(biomaRt)
+mart <- useMart('ensembl', dataset = 'mmusculus_gene_ensembl')
+
+#marts <- listDatasets(mart, verbose = FALSE)
+
+ensembl <- as.character(nearest.tss$tx_name)
+ensembl <- gsub("\\.\\d+$", "", ensembl)
+
+symbols <- getBM(attributes = c('ensembl_gene_id',
+                                'ensembl_transcript_id',
+                                'entrezgene_id',
+                                'mgi_symbol'),
+  filters = 'ensembl_transcript_id',
+  values = ensembl,
+  mart = mart)
+
+
+write.csv(symbols, file="Ezh2_DKO_TSS_targets.csv")
+
+ens_final <- mapIds(org.Mm.eg.db, keys=ensembl, keytype="ENSEMBLTRANS", column="SYMBOL")
+
+
+
+require('org.Mm.eg.db')
+keytypes(org.Mm.eg.db)
+select(
+  org.Mm.eg.db,
+  keytype = 'ENSEMBLTRANS',
+  columns = c('ENSEMBL','ENSEMBLTRANS','ENTREZID','SYMBOL'),
+  keys = ensembl)
+
+
+
+print(transcript_ids_clean)
+
+
+
+
+```
