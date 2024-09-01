@@ -1,6 +1,11 @@
 ## This file provides all codes for the creation of the different heatmaps used in the report, and during the study:
 
 ```{r}
+
+library(DESeq2)
+library(ggplot2)
+library(ComplexHeatmap)
+library(org.Mm.eg.db)
 HMGB1vsWT_DF <- as.data.frame(HMGB1vsWT_UP)
 HMGB1vsWT_MAT <- counts(dds, normalized = T)[rownames(HMGB1vsWT_DF), ]
 HMGB1vsWT_MAT.Z <- t(apply(HMGB1vsWT_MAT, 1, scale))
